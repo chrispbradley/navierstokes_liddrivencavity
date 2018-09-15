@@ -75,6 +75,7 @@ interfaceHermiteBasisUserNumber = 5
 fluidMeshUserNumber = 1
 
 fluidDecompositionUserNumber = 1
+fluidDecomposerUserNumber = 1
 
 fluidGeometricFieldUserNumber     = 1
 fluidEquationsSetFieldUserNumber = 2
@@ -116,8 +117,11 @@ iron.OutputSetOn("Testing")
 # Get the computational nodes info
 computationEnvironment = iron.ComputationEnvironment()
 iron.Context.ComputationEnvironmentGet(computationEnvironment)
-numberOfComputationalNodes = computationEnvironment.NumberOfWorldNodesGet()
-computationalNodeNumber = computationEnvironment.WorldNodeNumberGet()
+
+worldWorkGroup = iron.WorkGroup()
+computationEnvironment.WorldWorkGroupGet(worldWorkGroup)
+numberOfComputationalNodes = worldWorkGroup.NumberOfGroupNodesGet()
+computationalNodeNumber = worldWorkGroup.GroupNodeNumberGet()
 
 #================================================================================================================================
 #  Initial Data & Default Values
@@ -290,9 +294,6 @@ for yElementIdx in range(1,numberOfElements+1):
                     print('    Element %8d; Nodes: %8d, %8d, %8d, %8d, %8d, %8d, %8d, %8d, %8d' % \
                           (elementNumber,localNodes1,localNodes2,localNodes3,localNodes4,localNodes5,\
                            localNodes6,localNodes7,localNodes8,localNodes9))
-else:
-    print('Not implemented.')
-    exit
 
 fluidLinearElements.CreateFinish()
 if (useHermite):
@@ -315,13 +316,27 @@ if (progressDiagnostics):
 # Create a decomposition for the fluid mesh
 fluidDecomposition = iron.Decomposition()
 fluidDecomposition.CreateStart(fluidDecompositionUserNumber,fluidMesh)
-fluidDecomposition.TypeSet(iron.DecompositionTypes.CALCULATED)
-fluidDecomposition.NumberOfDomainsSet(numberOfComputationalNodes)
 fluidDecomposition.CalculateFacesSet(True)
 fluidDecomposition.CreateFinish()
 
 if (progressDiagnostics):
     print('Decomposition ... Done')
+
+#================================================================================================================================
+#  Decomposer
+#================================================================================================================================
+
+if (progressDiagnostics):
+    print('Decomposer ...')
+
+# Decompose 
+decomposer = iron.Decomposer()
+decomposer.CreateStart(fluidDecomposerUserNumber,worldRegion,worldWorkGroup)
+decompositionIndex = decomposer.DecompositionAdd(fluidDecomposition)
+decomposer.CreateFinish()
+
+if (progressDiagnostics):
+    print('Decomposer ... Done')
 
 #================================================================================================================================
 #  Geometric Field
