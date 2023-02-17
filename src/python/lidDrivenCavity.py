@@ -103,6 +103,8 @@ fluidProblemUserNumber = 1
 import numpy,csv,time,sys,os,pdb
 from opencmiss.iron import iron
 
+quit()
+
 if len(sys.argv) > 1:
     cellml_file = sys.argv[1]
 else:
