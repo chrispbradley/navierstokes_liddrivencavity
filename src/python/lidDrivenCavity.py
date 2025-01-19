@@ -380,7 +380,7 @@ if (debugLevel > 2):
 for yNodeIdx in range(1,numberOfElements*(numberOfNodesXi-1)+2):
     for xNodeIdx in range(1,numberOfElements*(numberOfNodesXi-1)+2):
         nodeNumber = xNodeIdx+(yNodeIdx-1)*(numberOfElements*(numberOfNodesXi-1)+1)
-        nodeDomain = fluidDecomposition.NodeDomainGet(nodeNumber,2)
+        nodeDomain = fluidDecomposition.NodeDomainGet(2,nodeNumber)
         if (nodeDomain == computationalNodeNumber):
             xPosition = float(xNodeIdx-1)/float(numberOfElements*(numberOfNodesXi-1))*cavitySize
             yPosition = float(yNodeIdx-1)/float(numberOfElements*(numberOfNodesXi-1))*cavitySize
@@ -576,7 +576,7 @@ if (debugLevel > 2):
     print('    Lid Model Set:')
 for xNodeIdx in range(2,numberOfElements*(numberOfNodesXi-1)+1):
     nodeNumber = xNodeIdx+(numberOfElements*(numberOfNodesXi-1)+1)*numberOfElements*(numberOfNodesXi-1)
-    nodeDomain = fluidDecomposition.NodeDomainGet(nodeNumber,2)
+    nodeDomain = fluidDecomposition.NodeDomainGet(2,nodeNumber)
     if (nodeDomain == computationalNodeNumber):
         bcCellMLModelsField.ParameterSetUpdateNodeIntg(oc.FieldVariableTypes.U,oc.FieldParameterSetTypes.VALUES,
                                                        1,oc.GlobalDerivativeConstants.NO_GLOBAL_DERIV,nodeNumber,1,1)
@@ -761,7 +761,7 @@ if (debugLevel > 2):
 # Set boundary conditions on the bottom of the cavity
 for xNodeIdx in range(1,numberOfElements*(numberOfNodesXi-1)+2):
     nodeNumber = xNodeIdx
-    nodeDomain = fluidDecomposition.NodeDomainGet(nodeNumber,2)
+    nodeDomain = fluidDecomposition.NodeDomainGet(2,nodeNumber)
     if (nodeDomain == computationalNodeNumber):
         fluidBoundaryConditions.SetNode(fluidDependentField,oc.FieldVariableTypes.U,1, \
                                         oc.GlobalDerivativeConstants.NO_GLOBAL_DERIV, \
@@ -796,9 +796,9 @@ nodeNumbers = [0,0]
 nodeDomains = [0,0]
 for yNodeIdx in range(2,numberOfElements*(numberOfNodesXi-1)+2):
     nodeNumbers[0] = (yNodeIdx-1)*(numberOfElements*(numberOfNodesXi-1)+1)+1
-    nodeDomains[0] = fluidDecomposition.NodeDomainGet(nodeNumbers[0],2)
+    nodeDomains[0] = fluidDecomposition.NodeDomainGet(2,nodeNumbers[0])
     nodeNumbers[1] = yNodeIdx*(numberOfElements*(numberOfNodesXi-1)+1)
-    nodeDomains[1] = fluidDecomposition.NodeDomainGet(nodeNumbers[1],2)
+    nodeDomains[1] = fluidDecomposition.NodeDomainGet(2,nodeNumbers[1])
     for sideIdx in [0,1]:
         if (nodeDomains[sideIdx] == computationalNodeNumber):
             fluidBoundaryConditions.SetNode(fluidDependentField,oc.FieldVariableTypes.U,1, \
@@ -834,7 +834,7 @@ if (debugLevel > 2):
 # Set boundary conditions on the lid of the cavity
 for xNodeIdx in range(2,numberOfElements*(numberOfNodesXi-1)+1):
     nodeNumber = xNodeIdx+(numberOfElements*(numberOfNodesXi-1)+1)*numberOfElements*(numberOfNodesXi-1)
-    nodeDomain = fluidDecomposition.NodeDomainGet(nodeNumber,2)
+    nodeDomain = fluidDecomposition.NodeDomainGet(2,nodeNumber)
     if (nodeDomain == computationalNodeNumber):
         fluidBoundaryConditions.SetNode(fluidDependentField,oc.FieldVariableTypes.U,1, \
                                         oc.GlobalDerivativeConstants.NO_GLOBAL_DERIV, \
