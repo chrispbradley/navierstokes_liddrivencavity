@@ -105,10 +105,12 @@ from opencmiss.opencmiss import OpenCMISS_Python as oc
 
 #quit()
 
+path=os.path.dirname(os.path.abspath(__file__))
+
 if len(sys.argv) > 1:
     cellml_file = sys.argv[1]
 else:
-    cellml_file = "input/fixedlidvelocity.cellml"
+    cellml_file = os.path.join(path,"input/fixedlidvelocity.cellml")
 
 context = oc.Context()
 context.Create(contextUserNumber)
